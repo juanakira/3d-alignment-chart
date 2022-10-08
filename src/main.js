@@ -7,6 +7,16 @@ import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer
 import GUI from 'lil-gui'
 import '../static/style.css'
 
+class Square {
+    constructor(food, time , fasting, text = '', details = ''){
+        this.food = food
+        this.time = time
+        this.fasting = fasting
+        this.text = text
+        this.details = ''
+    }
+}
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 5000 );
 const gui = new GUI();
@@ -120,7 +130,7 @@ const h1 = document.createElement('h1')
 h1.textContent = '3D Alignment Chart'
 document.body.appendChild( h1 );
 
-function textGenerator(){
+function textGeneratorCombi(){
     const foodPurist =  'has to include breakfast food'
     const foodNeutral = 'can contain versatile food (eg. cheese on bread)'
     const foodRadical = 'can be any food'
@@ -135,19 +145,6 @@ function textGenerator(){
     const timeArr = [timePurist, timeNeutral, timeRadical]
     const fastArr = [fastPurist, fastNeutral, fastRadical]
 
-    const keysObject = [
-        {food:0, text:'has to include breakfast food'},
-        {food:1, text: 'can contain versatile food (eg. cheese on bread)'},
-        {food:2, text: 'can be any food'},
-        {time:0, text: 'has to be eaten at morning time'},
-        {time:1, text: 'has to be the first meal of the day, but time does not matter'},
-        {time:2, text: 'can be eaten at any time'},
-        {fasting:0, text: "has to break your overnight fasting"},
-        {fasting:1, text: "doesn't necessarily has to be overnight fasting but you have to be hungry"},
-        {fasting:2, text: "can be eaten at any state of hunger or fasting"},     
-    ]
-
-    
 
     let fullArr = [...foodArr, ...timeArr, ...fastArr]
     let itGo = new $C.Combination(fullArr, 3);
@@ -172,4 +169,44 @@ function countRepeatWords(array, repeatWord){
     return counter
 }
 
+function textGenerator() {
+    const keysArr = [
+         {food:0, text:'has to include breakfast food'},
+        {food:1, text: 'can contain versatile food (eg. cheese on bread)'},
+        {food:2, text: 'can be any food'},
+        {time:0, text: 'has to be eaten at morning time'},
+        {time:1, text: 'has to be the first meal of the day, but time does not matter'},
+        {time:2, text: 'can be eaten at any time'},
+        {fasting:0, text: "has to break your overnight fasting"},
+        {fasting:1, text: "doesn't necessarily has to be overnight fasting but you have to be hungry"},
+        {fasting:2, text: "can be eaten at any state of hunger or fasting"}
+     ]
+    const foodArr = [
+        {food:0},
+        {food:1},
+        {food:2},
+        ]
+    const timeArr = [
+        {time:0},
+        {time:1},
+        {time:2},
+    ]
+    const fastingArr = [
+        {fasting:0},
+        {fasting:1},
+        {fasting:2},     
+    ]
+    
+    let comb = new $C.CartesianProduct(foodArr, timeArr, fastingArr);
+    console.log(comb)
+    let squareArr = [...comb].map(
+        array => array.reduce( (acc, x) => {
+            for (let key in x) acc[key] = x[key]
+            return acc
+        }, {} )
+    )
+   
+}
+
 textGenerator()
+
